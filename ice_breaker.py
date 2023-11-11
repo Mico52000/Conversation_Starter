@@ -43,7 +43,7 @@ def ice_break(name: str) -> Tuple[PersonIntel, str]:
     res = chain.run(linkedin_information=linkedin_data)
     ### notice how the rsult is still a string but it is formatted exactly like the output parser we defined
     ### in output parser.py
-
+    print(linkedin_data.get("profile_pic_url"))
     return person_intel_parser.parse(res), linkedin_data.get("profile_pic_url")
 
 
