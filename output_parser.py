@@ -19,4 +19,5 @@ class PersonIntel(BaseModel):
             "conversation_starters": self.conversation_starters,
         }
 
-person_intel_parser = PydanticOutputParser(pydantic_object = PersonIntel)
+
+person_intel_parser = PydanticOutputParser(pydantic_object=PersonIntel)
