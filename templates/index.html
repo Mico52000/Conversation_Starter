@@ -20,44 +20,80 @@
             <input type="text" id="name" name="name" placeholder="Enter name">
             <button id="magic-button" type="submit">Do Your Magic</button>
         </form>
-        <div id="result">
-            <img id="profile-pic" src="" alt="Profile Picture" style="display: none; max-width: 100%; height: auto; border-radius: 50%; margin-bottom: 20px;">
-            <h2>Summary</h2>
-            <p id="summary-and-facts"></p>
-            <h2>Interesting Facts</h2>
-            <div id="interests"></div>
-            <h2>Ice Breakers</h2>
-            <div id="ice-breakers"></div>
-            <h2>Topics of Interest</h2>
-            <div id="topics-of-interest"></div>
-        </div>
+        <div id="result" style="display:none;">
+    <img id="profile-pic" src="" alt="Profile Picture" style="display: none; max-width: 100%; height: auto; border-radius: 50%; margin-bottom: 20px;">
+    <h2 style="display: none;">Summary</h2>
+    <p id="summary-and-facts"></p>
+    <h2 style="display: none;">Interesting Facts</h2>
+    <div id="interests"></div>
+    <h2 style="display: none;">Conversation Starters</h2>
+    <div id="ice-breakers"></div>
+    <h2 style="display: none;">Topics of Interest</h2>
+    <div id="topics-of-interest"></div>
+</div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $('#name-form').on('submit', function (e) {
-                e.preventDefault();
-                $('#spinner-container').show();
-                $.ajax({
-                    url: '/process',
-                    data: $('#name-form').serialize(),
-                    type: 'POST',
-                    success: function (response) {
-                        $('#profile-pic').attr('src', response.picture_url); // Update the profile picture src attribute
-                        $('#profile-pic').show(); // Show the profile picture
+<script>
+    $(document).ready(function () {
+        $('#name-form').on('submit', function (e) {
+            e.preventDefault();
+            $('#spinner-container').show();
+            $.ajax({
+                url: '/process',
+                data: $('#name-form').serialize(),
+                type: 'POST',
+                success: function (response) {
+                    // Update the profile picture src attribute and show the picture
+                    $('#profile-pic').attr('src', response.picture_url).show();
+
+                    // Check if summary exists before updating
+                    if (response.hasOwnProperty('summary') && response.summary !== null) {
+                        // Update the summary text
+                        $('#result h2:contains("Summary")').show();
                         $('#summary-and-facts').text(response.summary);
-                        $('#interests').html('<ul>' + response.facts.map(fact => '<li>' + fact + '</li>').join('') + '</ul>');
-                        $('#ice-breakers').html('<ul>' + response.conversation_starters.map(ice_breaker => '<li>' + ice_breaker + '</li>').join('') + '</ul>');
-                        $('#topics-of-interest').html('<ul>' + response.topics_of_interest.map(topic => '<li>' + topic + '</li>').join('') + '</ul>');
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    },
-                    complete: function () {
-                        $('#spinner-container').hide();
+                    } else {
+                        $('#result h2:contains("Summary")').hide();
+                        $('#summary-and-facts').empty();
                     }
-                });
+
+                    // Display or hide headers and data based on presence
+                    if (response.facts.length > 0) {
+                        $('#result h2:contains("Interesting Facts")').show();
+                        $('#interests').html('<ul>' + response.facts.map(fact => '<li>' + fact + '</li>').join('') + '</ul>');
+                    } else {
+                        $('#result h2:contains("Interesting Facts")').hide();
+                        $('#interests').empty();
+                    }
+
+                    if (response.conversation_starters.length > 0) {
+                        $('#result h2:contains("Conversation Starters")').show();
+                        $('#ice-breakers').html('<ul>' + response.conversation_starters.map(ice_breaker => '<li>' + ice_breaker + '</li>').join('') + '</ul>');
+                    } else {
+                        $('#result h2:contains("Conversation Starters")').hide();
+                        $('#ice-breakers').empty();
+                    }
+
+                    if (response.topics_of_interest.length > 0) {
+                        $('#result h2:contains("Topics of Interest")').show();
+                        $('#topics-of-interest').html('<ul>' + response.topics_of_interest.map(topic => '<li>' + topic + '</li>').join('') + '</ul>');
+                    } else {
+                        $('#result h2:contains("Topics of Interest")').hide();
+                        $('#topics-of-interest').empty();
+                    }
+
+                    // Show the result section after receiving data
+                    $('#result').show();
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+                complete: function () {
+                    $('#spinner-container').hide();
+                }
             });
         });
-    </script>
+    });
+</script>
+
+
 </body>
 </html>
