@@ -19,7 +19,7 @@ def process():
 
         # Add profile_pic_url to the dictionary under the key "picture_url"
         person_dict["picture_url"] = profile_pic_url
-
+        print(person_dict)
         # Return the modified dictionary as JSON
         return jsonify(person_dict)
 

@@ -8,6 +8,7 @@ langchain = "*"
 requests = "*"
 black = "*"
 flask = "*"
+gpt4all = "*"
 
 [dev-packages]
 

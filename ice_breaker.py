@@ -1,3 +1,8 @@
+import os
+
+from langchain.callbacks import StreamingStdOutCallbackHandler
+from langchain.callbacks.base import BaseCallbackManager
+from langchain.llms.gpt4all import GPT4All
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
@@ -34,7 +39,11 @@ def ice_break(name: str) -> Tuple[PersonIntel, str]:
         },
     )
 
-    llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+    #llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+    current_path = os.getcwd()
+    gpt4all_path = os.path.join(current_path, "llm_models", "nous-hermes-llama2-13b.Q4_0.gguf")
+    callback_manager = BaseCallbackManager([StreamingStdOutCallbackHandler()])
+    llm = GPT4All(model=gpt4all_path, callback_manager=callback_manager, verbose=True)
 
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
@@ -43,7 +52,7 @@ def ice_break(name: str) -> Tuple[PersonIntel, str]:
     res = chain.run(linkedin_information=linkedin_data)
     ### notice how the rsult is still a string but it is formatted exactly like the output parser we defined
     ### in output parser.py
-    print(linkedin_data.get("profile_pic_url"))
+
     return person_intel_parser.parse(res), linkedin_data.get("profile_pic_url")
 
 

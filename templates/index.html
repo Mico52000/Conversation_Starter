@@ -46,8 +46,8 @@
                         $('#profile-pic').show(); // Show the profile picture
                         $('#summary-and-facts').text(response.summary);
                         $('#interests').html('<ul>' + response.facts.map(fact => '<li>' + fact + '</li>').join('') + '</ul>');
-                        $('#ice-breakers').html('<ul>' + response.ice_breakers.map(ice_breaker => '<li>' + ice_breaker + '</li>').join('') + '</ul>');
-                        $('#topics-of-interest').html('<ul>' + response.interests.map(topic => '<li>' + topic + '</li>').join('') + '</ul>');
+                        $('#ice-breakers').html('<ul>' + response.conversation_starters.map(ice_breaker => '<li>' + ice_breaker + '</li>').join('') + '</ul>');
+                        $('#topics-of-interest').html('<ul>' + response.topics_of_interest.map(topic => '<li>' + topic + '</li>').join('') + '</ul>');
                     },
                     error: function (error) {
                         console.log(error);
